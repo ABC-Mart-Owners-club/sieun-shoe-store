@@ -4,22 +4,23 @@ import java.util.List;
 import java.util.Optional;
 import org.shoestore.domain.model.User.User;
 import org.shoestore.domain.model.cart.Cart;
+import org.shoestore.domain.model.order.vo.Buyer;
 import org.shoestore.domain.model.product.Product;
 
 public class Order {
 
     private final List<OrderLine> orderLines; // 주문 상세내역
-    private final User user;
+    private final Buyer buyer;
 
     // region constructor
     public Order(List<OrderLine> orderLines, User user) {
         this.orderLines = orderLines;
-        this.user = user;
+        this.buyer = new Buyer(user);
     }
 
     public Order(Cart cart, User user) {
         this.orderLines = cart.getProducts().stream().map(OrderLine::new).toList();
-        this.user = user;
+        this.buyer = new Buyer(user);
     }
     // endregion
 

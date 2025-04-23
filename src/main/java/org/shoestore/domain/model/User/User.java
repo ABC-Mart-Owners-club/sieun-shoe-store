@@ -11,4 +11,14 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
     // endregion
+
+    //region getter logic
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+    // endregion
 }
