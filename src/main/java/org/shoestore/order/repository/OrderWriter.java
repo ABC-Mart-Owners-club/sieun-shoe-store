@@ -1,6 +1,6 @@
-package org.shoestore.repository;
+package org.shoestore.order.repository;
 
-import org.shoestore.domain.model.order.Order;
+import org.shoestore.order.model.Order;
 
 public interface OrderWriter {
 

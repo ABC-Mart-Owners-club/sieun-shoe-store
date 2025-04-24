@@ -1,15 +1,25 @@
-package org.shoestore.domain.model.product;
+package org.shoestore.product.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Product {
 
+    private final Long productId; // 상품 ID
     private final String modelName; // 모델 명
     private final String brand; // 브랜드
     private final double price; // 가격
 
     // region constructor
+    public Product(Long productId, String modelName, String brand, double price) {
+        this.productId = productId;
+        this.modelName = modelName;
+        this.brand = brand;
+        this.price = price;
+    }
+
     public Product(String modelName, String brand, double price) {
+        this.productId = null;
         this.modelName = modelName;
         this.brand = brand;
         this.price = price;
@@ -17,6 +27,18 @@ public class Product {
     // endregion
 
     // region getter logic
+    public Long getProductId() {
+        return this.productId;
+    }
+
+    public String getModelName() {
+        return this.modelName;
+    }
+
+    public String getBrand() {
+        return this.brand;
+    }
+
     public double getSalesAmount(){
         return this.price;
     }
@@ -25,7 +47,7 @@ public class Product {
     // region Equals Override
     @Override
     public int hashCode() {
-        return Objects.hash(this.modelName, this.brand);
+        return Objects.hash(this.productId);
     }
 
     @Override
@@ -36,8 +58,7 @@ public class Product {
         if (!(obj instanceof Product product)) {
             return false;
         }
-        return Objects.equals(modelName, product.modelName) &&
-                Objects.equals(brand, product.brand);
+        return Objects.equals(productId, product.productId);
     }
     // endregion
 }

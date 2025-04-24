@@ -3,6 +3,7 @@ package org.shoestore.domain.model.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.shoestore.product.model.Product;
 
 class ProductTest {
 

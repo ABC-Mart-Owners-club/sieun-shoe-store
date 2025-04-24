@@ -1,25 +1,29 @@
-package org.shoestore.domain.model.order;
+package org.shoestore.order.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import org.shoestore.domain.model.User.User;
-import org.shoestore.domain.model.cart.Cart;
-import org.shoestore.domain.model.order.vo.Buyer;
-import org.shoestore.domain.model.product.Product;
+import org.shoestore.User.model.User;
+import org.shoestore.order.model.vo.Buyer;
+import org.shoestore.product.model.Product;
 
 public class Order {
 
+    private final Long orderId;
     private final List<OrderLine> orderLines; // 주문 상세내역
     private final Buyer buyer;
 
     // region constructor
-    public Order(List<OrderLine> orderLines, User user) {
+
+    public Order(Long orderId, List<OrderLine> orderLines, Buyer buyer) {
+        this.orderId = orderId;
         this.orderLines = orderLines;
-        this.buyer = new Buyer(user);
+        this.buyer = buyer;
     }
 
-    public Order(Cart cart, User user) {
-        this.orderLines = cart.getProducts().stream().map(OrderLine::new).toList();
+    public Order(List<Product> products, User user) {
+        this.orderId = null;
+        this.orderLines = products.stream().map(OrderLine::new).toList();
         this.buyer = new Buyer(user);
     }
     // endregion
@@ -42,8 +46,11 @@ public class Order {
         return anyCanceled && anyPurchased;
     }
 
+    /**
+     * 상품의 판매 금액 조회
+     */
     public double getProductSalesAmount(Product product){
-        OrderLine orderLine = this.getOrderLine(product);
+        OrderLine orderLine = this.getOrderLine(product.getProductId());
         if (orderLine.isCanceled()) {
             return 0;
         }
@@ -53,9 +60,9 @@ public class Order {
     /**
      * 상품으로 주문 라인 조회
      */
-    private OrderLine getOrderLine(Product product) {
+    private OrderLine getOrderLine(Long productId) {
         Optional<OrderLine> optionalOrderLine = orderLines.stream()
-                .filter(orderLine -> orderLine.isEqualProduct(product)).findFirst();
+                .filter(orderLine -> orderLine.isEqualProduct(productId)).findFirst();
         if (optionalOrderLine.isEmpty()) {
             throw new RuntimeException("동일 상품을 찾을 수 없음");
         }
@@ -74,8 +81,8 @@ public class Order {
     /**
      * 상품 부분 취소
      */
-    public void partialCancel(Product product) {
-        OrderLine orderLine = this.getOrderLine(product);
+    public void partialCancel(Long productId) {
+        OrderLine orderLine = this.getOrderLine(productId);
         orderLine.cancel();
     }
     // endregion
