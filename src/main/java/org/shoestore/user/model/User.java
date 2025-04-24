@@ -1,4 +1,4 @@
-package org.shoestore.User.model;
+package org.shoestore.user.model;
 
 public class User {
 

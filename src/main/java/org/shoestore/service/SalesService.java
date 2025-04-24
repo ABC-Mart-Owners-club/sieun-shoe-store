@@ -1,7 +1,7 @@
 package org.shoestore.service;
 
 import java.util.List;
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 import org.shoestore.cart.model.Cart;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.usecase.OrderUseCase;

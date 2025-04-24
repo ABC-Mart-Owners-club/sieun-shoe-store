@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.usecase.OrderUseCase;
 import org.shoestore.product.model.Product;

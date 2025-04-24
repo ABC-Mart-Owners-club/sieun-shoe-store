@@ -1,6 +1,6 @@
 package org.shoestore.order.model.vo;
 
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 
 public record Buyer(
         String name,

@@ -1,9 +1,8 @@
 package org.shoestore.order.model;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 import org.shoestore.order.model.vo.Buyer;
 import org.shoestore.product.model.Product;
 

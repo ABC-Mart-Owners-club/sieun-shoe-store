@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 import org.shoestore.product.model.Product;
 import org.shoestore.order.model.Order;
 

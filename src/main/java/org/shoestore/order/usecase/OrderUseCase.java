@@ -1,7 +1,7 @@
 package org.shoestore.order.usecase;
 
 import java.util.List;
-import org.shoestore.User.model.User;
+import org.shoestore.user.model.User;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.repository.OrderReader;
 import org.shoestore.order.repository.OrderWriter;
