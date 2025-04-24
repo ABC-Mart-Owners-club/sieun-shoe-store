@@ -1,4 +1,4 @@
-package org.shoestore.domain.model.order;
+package org.shoestore.order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
