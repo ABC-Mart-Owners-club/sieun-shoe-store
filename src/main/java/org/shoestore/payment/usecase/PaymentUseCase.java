@@ -2,6 +2,7 @@ package org.shoestore.payment.usecase;
 
 import java.util.List;
 import org.shoestore.payment.model.Payment;
+import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.repository.PaymentReader;
 import org.shoestore.payment.repository.PaymentWriter;
 
@@ -31,5 +32,12 @@ public class PaymentUseCase {
             return;
         }
         paymentWriter.deletePaymentsByOrderId(orderId);
+    }
+
+    /**
+     * 카드사의 총 판매금액 조회
+     */
+    public double getCardSalesAmount(CardType cardType) {
+        return paymentReader.getCardSalesAmount(cardType);
     }
 }

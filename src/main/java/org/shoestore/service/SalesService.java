@@ -5,6 +5,7 @@ import java.util.List;
 import org.shoestore.payment.model.CashPayment;
 import org.shoestore.payment.model.CreditCardPayment;
 import org.shoestore.payment.model.Payment;
+import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.payment.usecase.PaymentUseCase;
 import org.shoestore.service.dto.PurchaseRequestDto;
@@ -87,5 +88,12 @@ public class SalesService {
     public double getProductSalesAmount(Product product) {
         List<Order> orders = orderUseCase.getOrdersHavingProduct(product);
         return orders.stream().mapToDouble(order -> order.getProductSalesAmount(product)).sum();
+    }
+
+    /**
+     * 카드사별 판매금액 조회
+     */
+    public double getCardSalesAmount(CardType cardType) {
+        return paymentUseCase.getCardSalesAmount(cardType);
     }
 }
