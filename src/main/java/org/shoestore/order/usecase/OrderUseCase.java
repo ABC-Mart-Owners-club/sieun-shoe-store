@@ -20,9 +20,9 @@ public class OrderUseCase {
     /**
      * 구매
      */
-    public void purchase(List<Product> products, User user) {
+    public Long purchase(List<Product> products, User user) {
         Order order = new Order(products, user);
-        orderWriter.saveOrder(order);
+        return orderWriter.saveOrder(order);
     }
 
     /**
@@ -46,5 +46,12 @@ public class OrderUseCase {
      */
     public List<Order> getOrdersHavingProduct(Product product) {
         return orderReader.getOrdersHavingProduct(product.getProductId());
+    }
+
+    /**
+     * 주문 실패 보상 로직
+     */
+    public void purchaseFailure(Long orderId) {
+        orderWriter.deleteOrder(orderId);
     }
 }

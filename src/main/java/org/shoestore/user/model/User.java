@@ -12,7 +12,13 @@ public class User {
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
-    // endregion
+
+    public User(Long userId, String name, String phoneNumber) {
+        this.userId = userId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+// endregion
 
     //region getter logic
     public String getName() {
