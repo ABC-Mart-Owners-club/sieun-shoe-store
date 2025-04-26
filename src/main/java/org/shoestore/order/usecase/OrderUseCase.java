@@ -20,7 +20,7 @@ public class OrderUseCase {
     /**
      * 구매
      */
-    public Long purchase(List<Product> products, User user) {
+    public Order purchase(List<Product> products, User user) {
         Order order = new Order(products, user);
         return orderWriter.saveOrder(order);
     }
@@ -51,7 +51,29 @@ public class OrderUseCase {
     /**
      * 주문 실패 보상 로직
      */
-    public void purchaseFailure(Long orderId) {
-        orderWriter.deleteOrder(orderId);
+    public void purchaseFailure(Order order) {
+        orderWriter.deleteOrder(order.getOrderId());
+    }
+
+    /**
+     * 주문 취소 실패 보상 로직
+     */
+    public void cancelFailure(Order order) {
+        orderWriter.updateOrderCancelFailure(order.getOrderId());
+    }
+
+    /**
+     * 주문 조회
+     */
+    public Order getOrderById(Long orderId) {
+        return orderReader.getOrderById(orderId);
+    }
+
+    /**
+     * 주문 부분취소 보상로직
+     */
+    public void partialCancelFailure(Order order, Product product) {
+        order.undoPartialCancel(product.getProductId());
+        orderWriter.updateOrder(order);
     }
 }

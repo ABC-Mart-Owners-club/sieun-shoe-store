@@ -30,9 +30,9 @@ class SalesServiceTest {
     private OrderWriter initOrderWriter(){
         return new OrderWriter() {
             @Override
-            public Long saveOrder(Order order) {
+            public Order saveOrder(Order order) {
                 System.out.println("주문 저장!");
-                return 1L;
+                return null;
             }
 
             @Override
@@ -43,6 +43,11 @@ class SalesServiceTest {
             @Override
             public void deleteOrder(Long orderId) {
                 System.out.println("주문 삭제!");
+            }
+
+            @Override
+            public void updateOrderCancelFailure(Long canceledOrderId) {
+                System.out.println("주문 취소 실패 보상 로직");
             }
         };
     }
@@ -68,6 +73,11 @@ class SalesServiceTest {
                 orders.add(new Order(productList1, me));
                 orders.add(new Order(productList2, me));
                 return orders;
+            }
+
+            @Override
+            public Order getOrderById(Long orderId) {
+                return null;
             }
         };
     }

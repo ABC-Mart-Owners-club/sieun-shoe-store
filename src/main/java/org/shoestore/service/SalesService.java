@@ -38,9 +38,9 @@ public class SalesService {
      */
     public void purchase(PurchaseRequestDto dto) {
 
-        Long now = System.currentTimeMillis(); // use as transaction Key
+        Long now = System.currentTimeMillis();
         User user = new User(dto.getUserId(), dto.getName(), dto.getPhoneNumber());
-        Long orderId = null;
+        Order order = null;
         List<Product> products = new ArrayList<>();
         List<Payment> payments = new ArrayList<>();
 
@@ -48,21 +48,21 @@ public class SalesService {
             // 1 Product 조회
             products = productUseCase.getProductsByProductIds(dto.getProductIds());
             // 2 조회된 상품 기준 주문 저장
-            orderId = orderUseCase.purchase(products, user);
+            order = orderUseCase.purchase(products, user);
 
             // 3 결제 생성 및 저장
             if (dto.getCashAmount() != null) {
-                payments.add(new CashPayment(new PaymentInfo(orderId, dto.getCashAmount(), now)));
+                payments.add(new CashPayment(new PaymentInfo(order.getOrderId(), dto.getCashAmount(), now)));
             }
             if (dto.getCardAmount() != null) {
-                payments.add(new CreditCardPayment(new PaymentInfo(orderId, dto.cardAmount, now),
+                payments.add(new CreditCardPayment(new PaymentInfo(order.getOrderId(), dto.cardAmount, now),
                         dto.getCardType()));
             }
             paymentUseCase.pay(payments);
         } catch (Exception e) {
-            if (orderId != null) {
-                paymentUseCase.payFailure(orderId);
-                orderUseCase.purchaseFailure(orderId);
+            if (order != null) {
+                paymentUseCase.payFailure(order);
+                orderUseCase.purchaseFailure(order);
             }
             throw new RuntimeException("결제 실패 : " + e.getMessage(), e);
         }
@@ -71,15 +71,34 @@ public class SalesService {
     /**
      * 취소
      */
-    public void cancel(Order order) {
-        orderUseCase.cancel(order);
+    public void cancel(Long orderId) {
+        Order order = orderUseCase.getOrderById(orderId);
+        try {
+            orderUseCase.cancel(order);
+            paymentUseCase.cancel(order);
+        } catch (Exception e) {
+            orderUseCase.cancelFailure(order);
+            paymentUseCase.cancelFailure(order);
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * 부분취소
      */
-    public void partialCancel(Order order, Product product) {
-        orderUseCase.partialCancel(order, product);
+    public void partialCancel(Long orderId, Long productId) {
+        Order order = orderUseCase.getOrderById(orderId);
+        Product product = productUseCase.getProductById(productId);
+        boolean canceledOrderSnapshot = false;
+        try {
+            orderUseCase.partialCancel(order, product);
+            canceledOrderSnapshot = order.isCanceled();
+            paymentUseCase.partialCancel(order);
+        } catch (Exception e) {
+            orderUseCase.partialCancelFailure(order, product);
+            paymentUseCase.partialCancelFailure(order, canceledOrderSnapshot);
+            throw new RuntimeException(e);
+        }
     }
 
     /**

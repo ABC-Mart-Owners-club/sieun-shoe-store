@@ -30,6 +30,13 @@ public class Order {
     // region getter logic
 
     /**
+     * orderId 조회
+     */
+    public Long getOrderId() {
+        return this.orderId;
+    }
+
+    /**
      * 전체 취소 여부
      */
     public boolean isCanceled(){
@@ -83,6 +90,14 @@ public class Order {
     public void partialCancel(Long productId) {
         OrderLine orderLine = this.getOrderLine(productId);
         orderLine.cancel();
+    }
+
+    /**
+     * 상품 부분취소 실패 보상 로직
+     */
+    public void undoPartialCancel(Long productId) {
+        OrderLine orderLine = this.getOrderLine(productId);
+        orderLine.undoCancel();
     }
     // endregion
 }
