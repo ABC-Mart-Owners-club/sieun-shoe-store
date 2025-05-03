@@ -24,5 +24,9 @@ public class CreditCardPayment extends Payment {
     PaymentMethod getPaymentMethod() {
         return PaymentMethod.CREDIT_CARD;
     }
+
+    public CardType getCardType() {
+        return this.cardType;
+    }
     // endregion
 }
