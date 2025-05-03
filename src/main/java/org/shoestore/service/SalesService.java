@@ -2,10 +2,10 @@ package org.shoestore.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.shoestore.payment.model.CashPayment;
-import org.shoestore.payment.model.CreditCardPayment;
 import org.shoestore.payment.model.Payment;
+import org.shoestore.payment.model.PaymentFactory;
 import org.shoestore.payment.model.type.CardType;
+import org.shoestore.payment.model.type.PaymentMethod;
 import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.payment.usecase.PaymentUseCase;
 import org.shoestore.service.dto.PurchaseRequestDto;
@@ -52,10 +52,12 @@ public class SalesService {
 
             // 3 결제 생성 및 저장
             if (dto.getCashAmount() != null) {
-                payments.add(new CashPayment(new PaymentInfo(order.getOrderId(), dto.getCashAmount(), now)));
+                payments.add(PaymentFactory.createPayment(PaymentMethod.CASH,
+                        new PaymentInfo(order.getOrderId(), dto.getCashAmount(), now), null));
             }
             if (dto.getCardAmount() != null) {
-                payments.add(new CreditCardPayment(new PaymentInfo(order.getOrderId(), dto.cardAmount, now),
+                payments.add(PaymentFactory.createPayment(PaymentMethod.CREDIT_CARD,
+                        new PaymentInfo(order.getOrderId(), dto.cardAmount, now),
                         dto.getCardType()));
             }
             paymentUseCase.pay(payments);
