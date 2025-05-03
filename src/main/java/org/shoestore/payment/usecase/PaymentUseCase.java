@@ -84,7 +84,7 @@ public class PaymentUseCase {
     public void payFailure(Order order) {
         Long orderId = order.getOrderId();
         List<Payment> payments = paymentReader.getPaymentsByOrderId(orderId);
-        if (payments.isEmpty()) {
+        if (payments == null || payments.isEmpty()) {
             return;
         }
         paymentWriter.deletePaymentsByOrderId(orderId);

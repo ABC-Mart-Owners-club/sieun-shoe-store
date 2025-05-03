@@ -143,10 +143,29 @@ class PaymentUseCaseTest {
 
     @Test
     void payFailure_주문정보_저장_전() {
+        Order purchasedOrder = prep.orderPurchased;
+        when(paymentReader.getPaymentsByOrderId(purchasedOrder.getOrderId())).thenReturn(null);
+
+        paymentUseCase.payFailure(purchasedOrder);
+
+        verify(paymentWriter, never()).deletePaymentsByOrderId(purchasedOrder.getOrderId());
     }
 
     @Test
     void payFailure_주문정보_저장_후() {
+        Order purchasedOrder = prep.orderPurchased;
+        List<Payment> payments = new ArrayList<>();
+        payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
+                0.0, null, null));
+        payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
+                null, 50000.0, CardType.KB_CARD));
+        when(paymentReader.getPaymentsByOrderId(purchasedOrder.getOrderId())).thenReturn(
+                payments);
+
+        paymentUseCase.payFailure(purchasedOrder);
+
+        verify(paymentWriter).deletePaymentsByOrderId(purchasedOrder.getOrderId());
+
     }
 
     @Test
