@@ -81,4 +81,32 @@ class SalesServiceTest {
             }
         };
     }
+
+    @Test
+    void purchase() {
+        // 주문 생성 됐는지
+        // payment 생성 됐는지
+    }
+
+    @Test
+    void purchase_실패() {
+        // 주문 생성 취소 됐는지
+        // payment 생성 취소 됐는지
+    }
+
+    @Test
+    void cancel() {
+    }
+
+    @Test
+    void partialCancel() {
+    }
+
+    @Test
+    void testGetProductSalesAmount() {
+    }
+
+    @Test
+    void getCardSalesAmount() {
+    }
 }
