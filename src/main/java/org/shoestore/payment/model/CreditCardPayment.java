@@ -21,7 +21,7 @@ public class CreditCardPayment extends Payment {
 
     // region getter logic
     @Override
-    PaymentMethod getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return PaymentMethod.CREDIT_CARD;
     }
 

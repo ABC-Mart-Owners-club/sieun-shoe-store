@@ -53,6 +53,13 @@ public class Order {
     }
 
     /**
+     * 주문 총액 조회
+     */
+    public double getTotalPrice(){
+        return this.orderLines.stream().mapToDouble(OrderLine::getPurchasePrice).sum();
+    }
+
+    /**
      * 상품의 판매 금액 조회
      */
     public double getProductSalesAmount(Product product){
@@ -60,7 +67,12 @@ public class Order {
         if (orderLine.isCanceled()) {
             return 0;
         }
-        return orderLine.getSalesAmount();
+        return orderLine.getPurchasePrice();
+    }
+
+    public double getProductPurchasePrice(Product product) {
+        OrderLine orderLine = this.getOrderLine(product.getProductId());
+        return orderLine.getPurchasePrice();
     }
 
     /**

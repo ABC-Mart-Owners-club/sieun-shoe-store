@@ -17,7 +17,7 @@ public class CashPayment extends Payment{
 
     // region getter logic
     @Override
-    PaymentMethod getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return PaymentMethod.CASH;
     }
     // endregion

@@ -60,7 +60,7 @@ public class SalesService {
                         new PaymentInfo(order.getOrderId(), dto.cardAmount, now),
                         dto.getCardType()));
             }
-            paymentUseCase.pay(payments);
+            paymentUseCase.pay(order, payments);
         } catch (Exception e) {
             if (order != null) {
                 paymentUseCase.payFailure(order);
@@ -95,7 +95,7 @@ public class SalesService {
         try {
             orderUseCase.partialCancel(order, product);
             canceledOrderSnapshot = order.isCanceled();
-            paymentUseCase.partialCancel(order);
+            paymentUseCase.partialCancel(order, product);
         } catch (Exception e) {
             orderUseCase.partialCancelFailure(order, product);
             paymentUseCase.partialCancelFailure(order, canceledOrderSnapshot);

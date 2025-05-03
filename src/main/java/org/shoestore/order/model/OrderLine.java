@@ -43,7 +43,7 @@ public class OrderLine {
         return !this.isCanceled;
     }
 
-    public double getSalesAmount(){
+    public double getPurchasePrice(){
         return this.orderItem.purchasedPrice();
     }
     // endregion

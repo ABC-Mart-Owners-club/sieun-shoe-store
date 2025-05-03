@@ -9,7 +9,9 @@ public interface PaymentWriter {
 
     void deletePaymentsByOrderId(Long orderId);
 
-    void updatePaymentCancel(Long canceledOrderId);
+    void updatePaymentCancelByOrderId(Long canceledOrderId);
+
+    void updateAllPayment(List<Payment> payments);
 
     void updatePaymentCancelFailure(Long canceledOrderId);
 }
