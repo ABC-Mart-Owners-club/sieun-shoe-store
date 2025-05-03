@@ -80,6 +80,7 @@ public class PaymentUseCase {
 
     /**
      * 결제 실패 보상로직
+     * <p>orderId 기준 저장된 결제내역 존재여부 확인</p>
      */
     public void payFailure(Order order) {
         Long orderId = order.getOrderId();
@@ -100,10 +101,8 @@ public class PaymentUseCase {
     /**
      * 결제 부분 취소 실패 보상로직
      */
-    public void partialCancelFailure(Order order, boolean isCanceledOrder) {
-        if (isCanceledOrder) {
-            paymentWriter.updatePaymentCancelFailure(order.getOrderId());
-        }
+    public void partialCancelFailure(Order order, Product product) {
+        // 진짜 비상인게, 해당 금액만큼 취소된 상태인지를 알 수 있는 방법이 없다는거임.
     }
 
     /**

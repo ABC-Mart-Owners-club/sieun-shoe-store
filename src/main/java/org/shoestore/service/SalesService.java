@@ -98,7 +98,7 @@ public class SalesService {
             paymentUseCase.partialCancel(order, product);
         } catch (Exception e) {
             orderUseCase.partialCancelFailure(order, product);
-            paymentUseCase.partialCancelFailure(order, canceledOrderSnapshot);
+            paymentUseCase.partialCancelFailure(order, product);
             throw new RuntimeException(e);
         }
     }

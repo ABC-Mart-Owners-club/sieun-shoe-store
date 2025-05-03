@@ -170,6 +170,12 @@ class PaymentUseCaseTest {
 
     @Test
     void cancelFailure() {
+        Order canceldOrder = prep.orderCanceled;
+
+        paymentUseCase.cancelFailure(canceldOrder);
+
+        verify(paymentWriter).updatePaymentCancelFailure(canceldOrder.getOrderId());
+
     }
 
     @Test
@@ -178,5 +184,7 @@ class PaymentUseCaseTest {
 
     @Test
     void getCardSalesAmount() {
+        paymentUseCase.getCardSalesAmount(CardType.KB_CARD);
+        verify(paymentReader).getCardSalesAmount(CardType.KB_CARD);
     }
 }
