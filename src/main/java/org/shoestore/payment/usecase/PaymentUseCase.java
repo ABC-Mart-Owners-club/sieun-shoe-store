@@ -54,6 +54,7 @@ public class PaymentUseCase {
         // 1. 취소된 결제면 취소 업데이트
         if (!order.isCanceled()) {
             paymentWriter.updatePaymentCancelByOrderId(order.getOrderId());
+            return;
         }
 
         List<Payment> payments = paymentReader.getPaymentsByOrderId(order.getOrderId());
