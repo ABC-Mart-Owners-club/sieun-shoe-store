@@ -7,4 +7,6 @@ import org.shoestore.product.model.Product;
 public interface OrderReader {
 
     List<Order> getOrdersHavingProduct(Long productId);
+
+    Order getOrderById(Long orderId);
 }

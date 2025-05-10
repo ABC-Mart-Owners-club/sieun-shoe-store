@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.shoestore.payment.usecase.PaymentUseCase;
 import org.shoestore.user.model.User;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.usecase.OrderUseCase;
@@ -14,7 +15,9 @@ import org.shoestore.order.repository.OrderWriter;
 
 class SalesServiceTest {
 
-    private final SalesService salesService = new SalesService(new OrderUseCase(initOrderWriter(), initOrderReader()), null);
+    private final SalesService salesService = new SalesService(
+            new OrderUseCase(initOrderWriter(), initOrderReader()), null,
+            new PaymentUseCase(null, null));
     private final Product targetProduct = new Product(1L,"에어포스", "나이키", 0);
 
     @Test
@@ -27,13 +30,24 @@ class SalesServiceTest {
     private OrderWriter initOrderWriter(){
         return new OrderWriter() {
             @Override
-            public void saveOrder(Order order) {
+            public Order saveOrder(Order order) {
                 System.out.println("주문 저장!");
+                return null;
             }
 
             @Override
             public void updateOrder(Order order) {
                 System.out.println("주문 업데이트!");
+            }
+
+            @Override
+            public void deleteOrder(Long orderId) {
+                System.out.println("주문 삭제!");
+            }
+
+            @Override
+            public void updateOrderCancelFailure(Long canceledOrderId) {
+                System.out.println("주문 취소 실패 보상 로직");
             }
         };
     }
@@ -60,6 +74,39 @@ class SalesServiceTest {
                 orders.add(new Order(productList2, me));
                 return orders;
             }
+
+            @Override
+            public Order getOrderById(Long orderId) {
+                return null;
+            }
         };
+    }
+
+    @Test
+    void purchase() {
+        // 주문 생성 됐는지
+        // payment 생성 됐는지
+    }
+
+    @Test
+    void purchase_실패() {
+        // 주문 생성 취소 됐는지
+        // payment 생성 취소 됐는지
+    }
+
+    @Test
+    void cancel() {
+    }
+
+    @Test
+    void partialCancel() {
+    }
+
+    @Test
+    void testGetProductSalesAmount() {
+    }
+
+    @Test
+    void getCardSalesAmount() {
     }
 }

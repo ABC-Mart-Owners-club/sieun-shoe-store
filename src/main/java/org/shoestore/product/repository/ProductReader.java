@@ -7,4 +7,5 @@ public interface ProductReader {
 
     List<Product> getProductsByIds(List<Long> productIds);
 
+    Product getProductById(Long productId);
 }

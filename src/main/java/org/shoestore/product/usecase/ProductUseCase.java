@@ -15,4 +15,8 @@ public class ProductUseCase {
     public List<Product> getProductsByProductIds(List<Long> productIds) {
         return this.productReader.getProductsByIds(productIds);
     }
+
+    public Product getProductById(Long productId) {
+        return this.productReader.getProductById(productId);
+    }
 }

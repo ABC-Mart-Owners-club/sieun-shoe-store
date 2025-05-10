@@ -1,4 +1,4 @@
-package org.shoestore.domain.model.product;
+package org.shoestore.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

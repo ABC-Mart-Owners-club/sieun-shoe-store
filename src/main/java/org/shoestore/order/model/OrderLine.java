@@ -43,7 +43,7 @@ public class OrderLine {
         return !this.isCanceled;
     }
 
-    public double getSalesAmount(){
+    public double getPurchasePrice(){
         return this.orderItem.purchasedPrice();
     }
     // endregion
@@ -54,6 +54,13 @@ public class OrderLine {
      */
     public void cancel(){
         this.isCanceled = true;
+    }
+
+    /**
+     * 주문 라인 취소 처리 실패 보상 로직
+     */
+    public void undoCancel() {
+        this.isCanceled = false;
     }
     // endregion
 }
