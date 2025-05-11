@@ -1,19 +1,24 @@
 package org.shoestore.product.usecase;
 
+import java.util.HashMap;
 import java.util.List;
 import org.shoestore.order.model.Order;
 import org.shoestore.product.model.Product;
+import org.shoestore.product.model.Stock;
 import org.shoestore.product.repository.ProductReader;
+import org.shoestore.product.repository.StockHistoryReader;
 import org.shoestore.product.repository.StockHistoryWriter;
 
 public class ProductUseCase {
 
     private final ProductReader productReader;
     private final StockHistoryWriter stockHistoryWriter;
+    private final StockHistoryReader stockHistoryReader;
 
-    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter) {
+    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter, StockHistoryReader stockHistoryReader) {
         this.productReader = productReader;
         this.stockHistoryWriter = stockHistoryWriter;
+        this.stockHistoryReader = stockHistoryReader;
     }
 
     /**
@@ -59,11 +64,31 @@ public class ProductUseCase {
         stockHistoryWriter.restoreStockFailureByOrderId(order.getOrderId());
     }
 
+    /**
+     * 부분취소 재입고 처리
+     */
     public void partialCancel(Order order, Product product) {
         stockHistoryWriter.restoreStockByProductId(order.getOrderId(), product.getProductId());
     }
 
+    /**
+     * 부분취소 재입고 실패 보상로직
+     */
     public void partialCancelFailure(Order order, Product product) {
         stockHistoryWriter.restoreStockFailureByProductId(order.getOrderId(), product.getProductId());
+    }
+
+    /**
+     * 입고 처리
+     */
+    public void restock(Product product, Stock stock) {
+        stockHistoryWriter.restock(product.getProductId(), stock);
+    }
+
+    /**
+     * 재고 조회
+     */
+    public HashMap<Long, Stock> getProductStock(List<Long> productIds) {
+        return stockHistoryReader.getProductStocks(productIds);
     }
 }
