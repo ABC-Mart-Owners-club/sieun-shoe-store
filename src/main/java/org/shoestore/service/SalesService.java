@@ -35,6 +35,7 @@ public class SalesService {
      * <p>1. Product 조회</p>
      * <p>2. 조회된 상품 기준 주문 저장</p>
      * <p>3. 결제 생성 및 저장</p>
+     * <p>4. 상품 판매 처리</p>
      */
     public void purchase(PurchaseRequestDto dto) {
 
@@ -61,10 +62,14 @@ public class SalesService {
                         dto.getCardType()));
             }
             paymentUseCase.pay(order, payments);
+            // 4. 상품 판매 처리
+            productUseCase.sale(order, products);
         } catch (Exception e) {
+            // orderId를 트랜잭션키로 활용하여 update 된 내역 발생 시 롤백 처리
             if (order != null) {
                 paymentUseCase.payFailure(order);
                 orderUseCase.purchaseFailure(order);
+                productUseCase.saleFailure(order);
             }
             throw new RuntimeException("결제 실패 : " + e.getMessage(), e);
         }
@@ -78,9 +83,11 @@ public class SalesService {
         try {
             orderUseCase.cancel(order);
             paymentUseCase.cancel(order);
+            productUseCase.cancel(order);
         } catch (Exception e) {
             orderUseCase.cancelFailure(order);
             paymentUseCase.cancelFailure(order);
+            productUseCase.cancelFailure(order);
             throw new RuntimeException(e);
         }
     }
@@ -91,14 +98,14 @@ public class SalesService {
     public void partialCancel(Long orderId, Long productId) {
         Order order = orderUseCase.getOrderById(orderId);
         Product product = productUseCase.getProductById(productId);
-        boolean canceledOrderSnapshot = false;
         try {
             orderUseCase.partialCancel(order, product);
-            canceledOrderSnapshot = order.isCanceled();
             paymentUseCase.partialCancel(order, product);
+            productUseCase.partialCancel(order, product);
         } catch (Exception e) {
             orderUseCase.partialCancelFailure(order, product);
             paymentUseCase.partialCancelFailure(order, product);
+            productUseCase.partialCancelFailure(order, product);
             throw new RuntimeException(e);
         }
     }
