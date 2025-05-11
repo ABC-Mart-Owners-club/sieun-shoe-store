@@ -1,6 +1,6 @@
 package org.shoestore.product.model;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Product {
@@ -9,13 +9,15 @@ public class Product {
     private final String modelName; // 모델 명
     private final String brand; // 브랜드
     private final double price; // 가격
+    private final StockHistory stockHistory; // 재고 내역
 
     // region constructor
-    public Product(Long productId, String modelName, String brand, double price) {
+    public Product(Long productId, String modelName, String brand, double price, StockHistory stockHistory) {
         this.productId = productId;
         this.modelName = modelName;
         this.brand = brand;
         this.price = price;
+        this.stockHistory = stockHistory;
     }
 
     public Product(String modelName, String brand, double price) {
@@ -23,6 +25,7 @@ public class Product {
         this.modelName = modelName;
         this.brand = brand;
         this.price = price;
+        this.stockHistory = new StockHistory(new ArrayList<>());
     }
     // endregion
 
@@ -41,6 +44,27 @@ public class Product {
 
     public double getSalesAmount(){
         return this.price;
+    }
+
+    /**
+     * 사용 가능한 재고번호 조회
+     */
+    public Long getUsableStockId() {
+        return this.stockHistory.getUsableStockId();
+    }
+
+    public StockHistory getStockHistory(){
+        return this.stockHistory;
+    }
+    // endregion
+
+    // region setter logic
+
+    /**
+     * 판매
+     */
+    public void sale() {
+        this.stockHistory.reduceStock();
     }
     // endregion
 

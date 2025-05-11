@@ -46,6 +46,11 @@ public class OrderLine {
     public double getPurchasePrice(){
         return this.orderItem.purchasedPrice();
     }
+
+
+    public Long getProductId() {
+        return this.orderItem.productId();
+    }
     // endregion
 
     // region getter logic

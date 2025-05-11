@@ -86,6 +86,13 @@ public class Order {
         }
         return optionalOrderLine.get();
     }
+
+    /**
+     * 주문 상품 Id 조회
+     */
+    public List<Long> getProductIds() {
+        return this.orderLines.stream().map(OrderLine::getProductId).toList();
+    }
     // endregion
 
     // region setter logic

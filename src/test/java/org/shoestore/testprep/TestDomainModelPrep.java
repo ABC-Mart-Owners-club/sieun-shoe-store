@@ -32,10 +32,10 @@ public class TestDomainModelPrep {
     public TestDomainModelPrep() {
         this.sieun = new User(1L, "시은", "0104590854");
         this.bumro = new User(2L, "범로", "0102583752");
-        this.productNikeJordan = new Product(1L, "나이키", "조던", 150000);
-        this.productNikeAirforce = new Product(2L, "나이키", "에어포스", 60000);
-        this.productAdidasPredator = new Product(3L, "프레데터", "아디다스", 130000);
-        this.productPumaNitro = new Product(4L, "나이트로", "퓨마", 210000);
+        this.productNikeJordan = new Product(1L, "나이키", "조던", 150000, null);
+        this.productNikeAirforce = new Product(2L, "나이키", "에어포스", 60000, null);
+        this.productAdidasPredator = new Product(3L, "프레데터", "아디다스", 130000, null);
+        this.productPumaNitro = new Product(4L, "나이트로", "퓨마", 210000, null);
         this.orderPurchased = new Order(1L, initPurchasedOrderLines(), new Buyer(this.sieun));
         this.orderCanceled = new Order(1L, initCanceledOrderLines(), new Buyer(this.sieun));
         this.orderPartialCanceled = new Order(1L, initPartialCanceledOrderLines(), new Buyer(this.sieun));

@@ -5,11 +5,12 @@ import org.shoestore.product.model.Product;
 
 public record OrderItem(
         Long productId,
+        Long stockId,
         double purchasedPrice
 ) {
 
     public OrderItem(Product product) {
-        this(product.getProductId(), product.getSalesAmount());
+        this(product.getProductId(), product.getUsableStockId(), product.getSalesAmount());
     }
 
     @Override
