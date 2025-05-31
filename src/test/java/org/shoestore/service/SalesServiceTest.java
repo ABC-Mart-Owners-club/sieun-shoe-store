@@ -18,7 +18,7 @@ class SalesServiceTest {
     private final SalesService salesService = new SalesService(
             new OrderUseCase(initOrderWriter(), initOrderReader()), null,
             new PaymentUseCase(null, null));
-    private final Product targetProduct = new Product(1L,"에어포스", "나이키", 0);
+    private final Product targetProduct = new Product(1L,"에어포스", "나이키", 0, null);
 
     @Test
     void getProductSalesAmount() {
@@ -56,10 +56,10 @@ class SalesServiceTest {
 
         List<Product> productList1 = new ArrayList<>();
         List<Product> productList2 = new ArrayList<>();
-        Product product1 = new Product(3L, "조던", "나이키", 19000);
-        Product product2 = new Product(2L, "프레데터", "아디다스", 30000);
-        Product product3 = new Product(1L, "에어포스", "나이키", 13000);
-        Product product4 = new Product(1L, "에어포스", "나이키", 9000);
+        Product product1 = new Product(3L, "조던", "나이키", 19000, null);
+        Product product2 = new Product(2L, "프레데터", "아디다스", 30000, null);
+        Product product3 = new Product(1L, "에어포스", "나이키", 13000, null);
+        Product product4 = new Product(1L, "에어포스", "나이키", 9000, null);
         productList1.add(product1);
         productList1.add(product3);
         productList2.add(product2);

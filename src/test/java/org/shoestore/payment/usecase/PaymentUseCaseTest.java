@@ -65,7 +65,7 @@ class PaymentUseCaseTest {
         payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
                 500000.0, null, null));
         payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
-                null, 50000.0, CardType.KB_CARD));
+                null, 5000.0, CardType.KB_CARD));
 
         assertThatThrownBy(() -> paymentUseCase.pay(purchasedOrder, payments))
                 .isInstanceOf(RuntimeException.class)
@@ -99,7 +99,7 @@ class PaymentUseCaseTest {
         Payment cashPayment = payments.stream().filter(Payment::isCashPayment).findFirst().get();
 
         assertThat(cardPayment.getRemainAmount()).isEqualTo(0);
-        assertThat(cashPayment.getRemainAmount()).isEqualTo(445000);
+        assertThat(cashPayment.getRemainAmount()).isEqualTo(490000);
         verify(paymentWriter).updateAllPayment(payments);
     }
 

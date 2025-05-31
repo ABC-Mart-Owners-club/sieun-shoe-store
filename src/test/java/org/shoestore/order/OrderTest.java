@@ -21,9 +21,9 @@ class OrderTest {
 
     @BeforeEach
     void init(){
-        product1 = new Product(1L, "조던", "나이키", 19000);
-        product2 = new Product(2L, "프레데터", "아디다스", 30000);
-        product3 = new Product(3L,"에어포스", "나이키", 13000);
+        product1 = new Product(1L, "조던", "나이키", 19000, null);
+        product2 = new Product(2L, "프레데터", "아디다스", 30000, null);
+        product3 = new Product(3L,"에어포스", "나이키", 13000, null);
         products = new ArrayList<>();
         products.add(product1);
         products.add(product2);
@@ -48,7 +48,7 @@ class OrderTest {
 
     @Test
     void partialCancel_주문_부분취소_테스트_상품불일치() {
-        Product notPurchasedProduct = new Product(4L, "이지부스트", "아디다스", 339293);
+        Product notPurchasedProduct = new Product(4L, "이지부스트", "아디다스", 339293, null);
         Order order = new Order(products, user);
         assertThatThrownBy(() -> order.partialCancel(notPurchasedProduct.getProductId()))
                 .isInstanceOf(RuntimeException.class)

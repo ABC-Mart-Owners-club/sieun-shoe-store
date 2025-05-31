@@ -52,7 +52,7 @@ public class PaymentUseCase {
      */
     public void partialCancel(Order order, Product product) {
         // 1. 취소된 결제면 취소 업데이트
-        if (!order.isCanceled()) {
+        if (order.isCanceled()) {
             paymentWriter.updatePaymentCancelByOrderId(order.getOrderId());
             return;
         }
