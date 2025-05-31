@@ -21,8 +21,8 @@ public class StockHistory {
     /**
      * 사용 가능한 재고번호 조회
      */
-    public Long getUsableStockId() {
-        return this.stocks.stream().filter(Stock::isRemain).findFirst().map(Stock::getStockId)
+    public Stock getUsableStock() {
+        return this.stocks.stream().filter(Stock::isRemain).findFirst()
                 .orElseThrow(()-> new RuntimeException("사용 가능한 재고 없음."));
     }
     // endregion
