@@ -2,6 +2,7 @@ package org.shoestore.product.model;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import org.shoestore.product.model.type.StockDiscountType;
 
 public class Product {
 
@@ -50,11 +51,19 @@ public class Product {
      * 사용 가능한 재고번호 조회
      */
     public Long getUsableStockId() {
-        return this.stockHistory.getUsableStockId();
+        return this.stockHistory.getUsableStock().getStockId();
     }
 
     public StockHistory getStockHistory(){
         return this.stockHistory;
+    }
+
+    /**
+     * 재고 할인 타입 조회
+     */
+    public StockDiscountType getStockDiscountType() {
+        Stock usableStock = stockHistory.getUsableStock();
+        return StockDiscountType.getStockDiscountType(usableStock);
     }
     // endregion
 
