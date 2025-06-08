@@ -1,7 +1,10 @@
 package org.shoestore.testprep;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import org.shoestore.Util;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.model.OrderLine;
 import org.shoestore.order.model.vo.Buyer;
@@ -12,6 +15,9 @@ import org.shoestore.payment.model.Payment;
 import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.product.model.Product;
+import org.shoestore.product.model.Stock;
+import org.shoestore.product.model.StockHistory;
+import org.shoestore.product.model.type.Supplier;
 import org.shoestore.user.model.User;
 
 public class TestDomainModelPrep {
@@ -32,10 +38,10 @@ public class TestDomainModelPrep {
     public TestDomainModelPrep() {
         this.sieun = new User(1L, "시은", "0104590854");
         this.bumro = new User(2L, "범로", "0102583752");
-        this.productNikeJordan = new Product(1L, "나이키", "조던", 150000, null);
-        this.productNikeAirforce = new Product(2L, "나이키", "에어포스", 60000, null);
-        this.productAdidasPredator = new Product(3L, "프레데터", "아디다스", 130000, null);
-        this.productPumaNitro = new Product(4L, "나이트로", "퓨마", 210000, null);
+        this.productNikeJordan = new Product(1L, "나이키", "조던", 150000, nikeJordanStockHistory());
+        this.productNikeAirforce = new Product(2L, "나이키", "에어포스", 60000, nikeAirForceStockHistory());
+        this.productAdidasPredator = new Product(3L, "프레데터", "아디다스", 130000, adidasStockHistory());
+        this.productPumaNitro = new Product(4L, "나이트로", "퓨마", 210000, pumaStockHistory());
         this.orderPurchased = new Order(1L, initPurchasedOrderLines(), new Buyer(this.sieun));
         this.orderCanceled = new Order(1L, initCanceledOrderLines(), new Buyer(this.sieun));
         this.orderPartialCanceled = new Order(1L, initPartialCanceledOrderLines(), new Buyer(this.sieun));
@@ -82,5 +88,36 @@ public class TestDomainModelPrep {
         orderLines.add(new OrderLine(11L, new OrderItem(this.productAdidasPredator), false));
         orderLines.add(new OrderLine(12L, new OrderItem(this.productPumaNitro), false));
         return orderLines;
+    }
+
+    private StockHistory nikeJordanStockHistory() {
+        long epochSecond = LocalDateTime.now().minusDays(1L).toEpochSecond(ZoneOffset.UTC);
+        List<Stock> stocks = new ArrayList<>();
+        stocks.add(new Stock(1L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        stocks.add(new Stock(2L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        return new StockHistory(stocks);
+    }
+
+    private StockHistory nikeAirForceStockHistory() {
+        long epochSecond = LocalDateTime.now().minusDays(1L).toEpochSecond(ZoneOffset.UTC);
+        List<Stock> stocks = new ArrayList<>();
+        stocks.add(new Stock(3L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        stocks.add(new Stock(4L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        return new StockHistory(stocks);
+    }
+
+    private StockHistory adidasStockHistory() {
+        long epochSecond = LocalDateTime.now().minusDays(1L).toEpochSecond(ZoneOffset.UTC);
+        List<Stock> stocks = new ArrayList<>();
+        stocks.add(new Stock(5L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        stocks.add(new Stock(6L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        return new StockHistory(stocks);
+    }
+    private StockHistory pumaStockHistory() {
+        long epochSecond = LocalDateTime.now().minusDays(1L).toEpochSecond(ZoneOffset.UTC);
+        List<Stock> stocks = new ArrayList<>();
+        stocks.add(new Stock(7L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        stocks.add(new Stock(7L, Supplier.CRAZY_DISTRIBUTOR, 10L, 10L, Util.localDateTimeToMilli(LocalDateTime.now().minusDays(1L))));
+        return new StockHistory(stocks);
     }
 }
