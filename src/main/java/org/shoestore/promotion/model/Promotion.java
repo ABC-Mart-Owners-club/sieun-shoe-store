@@ -16,4 +16,8 @@ public class Promotion {
     public double getDiscountAmount(double price) {
         return promotionType.getDiscountAmount(this.discountValue, price);
     }
+
+    public PromotionType getPromotionType() {
+        return promotionType;
+    }
 }

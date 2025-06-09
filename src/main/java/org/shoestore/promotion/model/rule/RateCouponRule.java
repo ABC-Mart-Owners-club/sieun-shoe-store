@@ -5,11 +5,11 @@ import org.shoestore.promotion.model.PromotionRule;
 public class RateCouponRule implements PromotionRule {
 
     // 최대 할인 금액
-    private static final Double MAX_DISCOUNT_AMOUNT = 50000.0;
+    private static final Double MAX_PRICE_AMOUNT = 500000.0;
 
     @Override
-    public boolean validateRule(double price, int discountValue) {
+    public boolean validateRule(double price, double discountValue) {
 
-        return price * discountValue <= MAX_DISCOUNT_AMOUNT;
+        return price <= MAX_PRICE_AMOUNT;
     }
 }

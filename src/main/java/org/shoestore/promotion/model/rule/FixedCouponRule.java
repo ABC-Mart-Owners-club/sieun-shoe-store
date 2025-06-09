@@ -8,7 +8,7 @@ public class FixedCouponRule implements PromotionRule {
     private static final Double MIN_PRICE_AMOUNT = 30000.0;
 
     @Override
-    public boolean validateRule(double price, int discountValue) {
+    public boolean validateRule(double price, double discountValue) {
         return price >= MIN_PRICE_AMOUNT;
     }
 }
