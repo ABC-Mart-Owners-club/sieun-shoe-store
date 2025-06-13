@@ -2,6 +2,7 @@ package org.shoestore.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,12 @@ class SalesServiceTest {
             @Override
             public Order getOrderById(Long orderId) {
                 return null;
+            }
+
+            @Override
+            public List<Order> getStockDiscountedOrder(LocalDateTime startDateTime,
+                    LocalDateTime endDateTime) {
+                return List.of();
             }
         };
     }

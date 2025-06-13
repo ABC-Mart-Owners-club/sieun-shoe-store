@@ -33,7 +33,7 @@ class PromotionUseCaseTest {
         @Override
         public double getPromotionSalesAmount(LocalDateTime startDateTime,
                 LocalDateTime endDateTime) {
-
+            return 0;
         }
     });
 
