@@ -1,6 +1,9 @@
 package org.shoestore.order.usecase;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import org.shoestore.Util;
+import org.shoestore.service.dto.StockDiscountRequestDto;
 import org.shoestore.user.model.User;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.repository.OrderReader;
@@ -75,5 +78,12 @@ public class OrderUseCase {
     public void partialCancelFailure(Order order, Product product) {
         order.undoPartialCancel(product.getProductId());
         orderWriter.updateOrder(order);
+    }
+
+    public double getStockDiscountAmount(StockDiscountRequestDto req) {
+        LocalDateTime startDateTime = Util.milliToLocalDateTime(req.startTimestamp);
+        LocalDateTime endDateTime = Util.milliToLocalDateTime(req.endTimestamp);
+        List<Order> stockDiscountedOrder = orderReader.getStockDiscountedOrder(startDateTime, endDateTime);
+        return stockDiscountedOrder.stream().mapToDouble(Order::getStockDiscountSaleAmount).sum();
     }
 }

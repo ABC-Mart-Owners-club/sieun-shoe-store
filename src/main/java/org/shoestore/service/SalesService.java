@@ -1,17 +1,14 @@
 package org.shoestore.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.shoestore.payment.model.Payment;
-import org.shoestore.payment.model.PaymentFactory;
 import org.shoestore.payment.model.Payments;
 import org.shoestore.payment.model.type.CardType;
-import org.shoestore.payment.model.type.PaymentMethod;
-import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.payment.usecase.PaymentUseCase;
 import org.shoestore.promotion.model.Promotion;
 import org.shoestore.promotion.usecase.PromotionUseCase;
+import org.shoestore.service.dto.PromotionRequestDto;
 import org.shoestore.service.dto.PurchaseRequestDto;
+import org.shoestore.service.dto.StockDiscountRequestDto;
 import org.shoestore.user.model.User;
 import org.shoestore.order.model.Order;
 import org.shoestore.order.usecase.OrderUseCase;
@@ -69,6 +66,9 @@ public class SalesService {
 
             // 4. 상품 판매 처리
             productUseCase.sale(order, products);
+
+            // 5. 프로모션 사용 처리 todo : 갑자기 든 생각인데, 사용하는한 promotion을 조회해올때(3번) 이미 사용 처리를 같이 해버리면 어떨까? 문제될 수 있는 부분이 있나?
+            promotionUseCase.use(order, promotion);
         } catch (Exception e) {
             // orderId를 트랜잭션키로 활용하여 update 된 내역 발생 시 롤백 처리
             if (order != null) {
@@ -128,5 +128,19 @@ public class SalesService {
      */
     public double getCardSalesAmount(CardType cardType) {
         return paymentUseCase.getCardSalesAmount(cardType);
+    }
+
+    /**
+     * 할인 판매금액 조회
+     */
+    public double getPromotionSalesAmount(PromotionRequestDto req) {
+        return promotionUseCase.getPromotionSalesAmount(req);
+    }
+
+    /**
+     * 재고 할인 판매금액 조회
+     */
+    public double getStockDiscountAmount(StockDiscountRequestDto req) {
+        return orderUseCase.getStockDiscountAmount(req);
     }
 }
