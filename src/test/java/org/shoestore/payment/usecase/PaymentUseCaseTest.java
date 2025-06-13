@@ -2,27 +2,22 @@ package org.shoestore.payment.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.shoestore.order.model.Order;
-import org.shoestore.payment.model.CashPayment;
-import org.shoestore.payment.model.CreditCardPayment;
 import org.shoestore.payment.model.Payment;
+import org.shoestore.payment.model.Payments;
 import org.shoestore.payment.model.type.CardType;
-import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.payment.repository.PaymentReader;
 import org.shoestore.payment.repository.PaymentWriter;
 import org.shoestore.product.model.Product;
@@ -53,7 +48,7 @@ class PaymentUseCaseTest {
         payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
                 null, 50000.0, CardType.KB_CARD));
 
-        paymentUseCase.pay(purchasedOrder, payments);
+        paymentUseCase.pay(purchasedOrder, new Payments(payments));
 
         verify(paymentWriter).savePayments(payments);
     }
@@ -67,7 +62,7 @@ class PaymentUseCaseTest {
         payments.add(TestDomainModelPrep.createPaymentWithOrder(purchasedOrder.getOrderId(),
                 null, 5000.0, CardType.KB_CARD));
 
-        assertThatThrownBy(() -> paymentUseCase.pay(purchasedOrder, payments))
+        assertThatThrownBy(() -> paymentUseCase.pay(purchasedOrder, new Payments(payments)))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("주문금액과 결제금액이 맞지 않음");
     }

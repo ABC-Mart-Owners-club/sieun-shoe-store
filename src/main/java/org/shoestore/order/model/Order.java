@@ -93,6 +93,13 @@ public class Order {
     public List<Long> getProductIds() {
         return this.orderLines.stream().map(OrderLine::getProductId).toList();
     }
+
+    /**
+     * 재고 할인 적용된 판매금액 조회
+     */
+    public double getStockDiscountSaleAmount() {
+        return this.orderLines.stream().mapToDouble(OrderLine::getPurchasePrice).sum();
+    }
     // endregion
 
     // region setter logic

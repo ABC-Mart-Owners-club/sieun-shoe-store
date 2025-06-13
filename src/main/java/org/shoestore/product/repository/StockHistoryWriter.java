@@ -20,6 +20,8 @@ public interface StockHistoryWriter {
      * stockId
      * orderId
      * stockUseAmount (양수 혹은 음수)
+     * stockDiscountType
+     * regDate
      */
 
     // 재고 사용 내역과 orderId, productId 정보 같이 저장
