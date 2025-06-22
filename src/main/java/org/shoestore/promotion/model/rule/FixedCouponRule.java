@@ -11,4 +11,9 @@ public class FixedCouponRule implements PromotionRule {
     public boolean validateRule(double price, double discountValue) {
         return price >= MIN_PRICE_AMOUNT;
     }
+
+    @Override
+    public double getDiscountValue(double price, double discountValue) {
+        return discountValue;
+    }
 }
