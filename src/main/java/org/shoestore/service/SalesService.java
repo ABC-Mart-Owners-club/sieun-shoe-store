@@ -4,6 +4,7 @@ import java.util.List;
 import org.shoestore.payment.model.Payments;
 import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.usecase.PaymentUseCase;
+import org.shoestore.product.lock.DistributedLock;
 import org.shoestore.promotion.model.Promotion;
 import org.shoestore.promotion.usecase.PromotionUseCase;
 import org.shoestore.service.dto.PromotionRequestDto;
@@ -21,20 +22,24 @@ public class SalesService {
     private final ProductUseCase productUseCase;
     private final PaymentUseCase paymentUseCase;
     private final PromotionUseCase promotionUseCase;
+    private final DistributedLock distributedLock;
 
     public SalesService(OrderUseCase orderUseCase,
             ProductUseCase productUseCase,
             PaymentUseCase paymentUseCase,
-            PromotionUseCase promotionUseCase
+            PromotionUseCase promotionUseCase,
+            DistributedLock distributedLock
     ) {
         this.orderUseCase = orderUseCase;
         this.productUseCase = productUseCase;
         this.paymentUseCase = paymentUseCase;
         this.promotionUseCase = promotionUseCase;
+        this.distributedLock = distributedLock;
     }
 
     /**
      * 구매
+     * <p>0. 주문 대상 상품 lock 획득 (동시성 문제 해소)</p>
      * <p>1. Product 조회</p>
      * <p>2. 조회된 상품 기준 주문 저장</p>
      * <p>3. 프로모션 조회</p>
@@ -47,7 +52,11 @@ public class SalesService {
         User user = new User(dto.getUserId(), dto.getName(), dto.getPhoneNumber());
         Order order = null;
 
+        List<String> lockNames = dto.getProductIds().stream().map(distributedLock::genLockName).toList();
         try {
+            // 0 대상 상품 Lock
+            distributedLock.getLocks(lockNames);
+
             // 1 Product 조회
             List<Product> products = productUseCase.getProductsByProductIds(dto.getProductIds());
             // 2 조회된 상품 기준 주문 저장
@@ -76,6 +85,8 @@ public class SalesService {
                 productUseCase.saleFailure(order);
             }
             throw new RuntimeException("결제 실패 : " + e.getMessage(), e);
+        } finally {
+            distributedLock.releaseLocks(lockNames);
         }
     }
 

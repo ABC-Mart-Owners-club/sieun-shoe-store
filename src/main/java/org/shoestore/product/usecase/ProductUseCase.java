@@ -16,30 +16,18 @@ public class ProductUseCase {
     private final ProductReader productReader;
     private final StockHistoryWriter stockHistoryWriter;
     private final StockHistoryReader stockHistoryReader;
-    private final DistributedLock distributedLock;
 
-    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter, StockHistoryReader stockHistoryReader, RedisDistributedLock distributedLock) {
+    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter, StockHistoryReader stockHistoryReader) {
         this.productReader = productReader;
         this.stockHistoryWriter = stockHistoryWriter;
         this.stockHistoryReader = stockHistoryReader;
-        this.distributedLock = distributedLock;
     }
 
     /**
      * 상품 목록 조회
      */
     public List<Product> getProductsByProductIds(List<Long> productIds) {
-        List<String> lockNames = productIds.stream().map(distributedLock::genLockName).toList();
-        // 상품 개수 조회 시 lock 지정
-        try {
-            boolean locks = distributedLock.getLocks(lockNames);
-            if(!locks) {
-                throw new RuntimeException("Could not get locks");
-            }
-            return this.productReader.getProductsByIds(productIds);
-        } finally {
-            distributedLock.releaseLocks(lockNames);
-        }
+        return this.productReader.getProductsByIds(productIds);
     }
 
     /**

@@ -20,7 +20,7 @@ class SalesServiceTest {
     private final TestDomainModelPrep prep = new TestDomainModelPrep();
     private final SalesService salesService = new SalesService(
             new OrderUseCase(initOrderWriter(), initOrderReader()), null,
-            new PaymentUseCase(null, null), null);
+            new PaymentUseCase(null, null), null, null);
     private final Product targetProduct = new Product(1L,"에어포스", "나이키", 0, null);
 
     @Test
