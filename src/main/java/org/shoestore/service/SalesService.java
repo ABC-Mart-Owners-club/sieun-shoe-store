@@ -61,7 +61,6 @@ public class SalesService {
             Payments payments = new Payments(order, dto.getCashAmount(),
                     dto.getCardAmount(), dto.getCardType(), promotion);
 
-            // todo : 근데 이게 살짝 어폐가 있는게, 유저는 할인먹기전 금액으로 결제 요청을 해야함. 이게 정상적으로 지켜지려면, 주문 생성, 결제 진행 2단계로 나뉘어야할듯함. (오프라인 기준으로는 그냥 진행)
             paymentUseCase.pay(order, payments);
 
             // 4. 상품 판매 처리
