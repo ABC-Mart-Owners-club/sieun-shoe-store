@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.5' // Spring Boot 플러그인 버전이 명시되어 있는지 확인
+    id 'io.spring.dependency-management' version '1.1.4' // dependency-management 플러그인도 함께 있는지 확인
 }
 
 group = 'org.example'
@@ -10,11 +12,25 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'org.mockito:mockito-core:5.12.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+    // Spring Boot Starter Data Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
+    // Lombok (선택 사항)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // *** 이 부분이 중요합니다. ***
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // 이 줄이 정확한지 확인
+
+    // JUnit Jupiter API (spring-boot-starter-test에 포함되어 있지만, 명시적으로 추가해도 무방)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    // 테스트 런타임 의존성 (JUnit Platform Launcher)
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
