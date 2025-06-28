@@ -51,6 +51,13 @@ public class OrderLine {
     public Long getProductId() {
         return this.orderItem.productId();
     }
+
+    public double getStockDiscountSalesAmount() {
+        if (orderItem.stockDiscountType() == null) {
+            return 0;
+        }
+        return orderItem.purchasedPrice();
+    }
     // endregion
 
     // region getter logic

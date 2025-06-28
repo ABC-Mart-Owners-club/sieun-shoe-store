@@ -1,14 +1,18 @@
 package org.shoestore.payment.usecase;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.shoestore.order.model.Order;
 import org.shoestore.payment.model.Payment;
+import org.shoestore.payment.model.PaymentFactory;
+import org.shoestore.payment.model.Payments;
 import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.model.type.PaymentMethod;
+import org.shoestore.payment.model.vo.PaymentInfo;
 import org.shoestore.payment.repository.PaymentReader;
 import org.shoestore.payment.repository.PaymentWriter;
 import org.shoestore.product.model.Product;
+import org.shoestore.promotion.model.Promotion;
 
 public class PaymentUseCase {
 
@@ -23,15 +27,19 @@ public class PaymentUseCase {
     /**
      * 결제
      * <p>1. 주문 금액과 결제 금액 일치여부 확인</p>
+     * <p>2. 할인 적용</p>
      * <p>2. 주문정보 저장</p>
      */
-    public void pay(Order order, List<Payment> payments) {
-        double totalPaymentAmount = payments.stream().mapToDouble(Payment::getPaymentAmount).sum();
+    public void pay(Order order, Payments payments) {
+
+        double totalPaymentAmount = payments.getPayments().stream()
+                .mapToDouble(Payment::getPaymentAmount).sum();
         // 1.주문 금액과 결제 금액 일치여부 확인
         if (order.getTotalPrice() != totalPaymentAmount) {
             throw new RuntimeException("주문금액과 결제금액이 맞지 않음");
         }
-        paymentWriter.savePayments(payments);
+        // 3.주문 정보 저장
+        paymentWriter.savePayments(payments.getPayments());
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.shoestore.testprep.TestDomainModelPrep;
 import org.shoestore.user.model.User;
 import org.shoestore.product.model.Product;
 import org.shoestore.order.model.Order;
@@ -18,12 +19,13 @@ class OrderTest {
     private Product product1;
     private Product product2;
     private Product product3;
+    private TestDomainModelPrep prep = new TestDomainModelPrep();
 
     @BeforeEach
     void init(){
-        product1 = new Product(1L, "조던", "나이키", 19000, null);
-        product2 = new Product(2L, "프레데터", "아디다스", 30000, null);
-        product3 = new Product(3L,"에어포스", "나이키", 13000, null);
+        product1 = prep.productNikeAirforce;
+        product2 = prep.productAdidasPredator;
+        product3 = prep.productNikeAirforce;
         products = new ArrayList<>();
         products.add(product1);
         products.add(product2);

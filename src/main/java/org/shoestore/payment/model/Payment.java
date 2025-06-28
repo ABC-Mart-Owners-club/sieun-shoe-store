@@ -78,5 +78,9 @@ public abstract class Payment {
     public void refundAll() {
         this.remainAmount = 0.0;
     }
+
+    public void applyPromotion(double discountAmount) {
+        discountAmount -= this.remainAmount;
+    }
     // endregion
 }
