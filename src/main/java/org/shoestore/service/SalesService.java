@@ -66,7 +66,7 @@ public class SalesService {
             // 4. 상품 판매 처리
             productUseCase.sale(order, products);
 
-            // 5. 프로모션 사용 처리 todo : 갑자기 든 생각인데, 사용하는한 promotion을 조회해올때(3번) 이미 사용 처리를 같이 해버리면 어떨까? 문제될 수 있는 부분이 있나?
+            // 5. 프로모션 사용 처리
             promotionUseCase.use(order, promotion);
         } catch (Exception e) {
             // orderId를 트랜잭션키로 활용하여 update 된 내역 발생 시 롤백 처리
