@@ -3,6 +3,8 @@ package org.shoestore.product.usecase;
 import java.util.HashMap;
 import java.util.List;
 import org.shoestore.order.model.Order;
+import org.shoestore.product.lock.DistributedLock;
+import org.shoestore.product.lock.RedisDistributedLock;
 import org.shoestore.product.model.Product;
 import org.shoestore.product.model.Stock;
 import org.shoestore.product.repository.ProductReader;
@@ -14,18 +16,30 @@ public class ProductUseCase {
     private final ProductReader productReader;
     private final StockHistoryWriter stockHistoryWriter;
     private final StockHistoryReader stockHistoryReader;
+    private final DistributedLock distributedLock;
 
-    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter, StockHistoryReader stockHistoryReader) {
+    public ProductUseCase(ProductReader productReader, StockHistoryWriter stockHistoryWriter, StockHistoryReader stockHistoryReader, RedisDistributedLock distributedLock) {
         this.productReader = productReader;
         this.stockHistoryWriter = stockHistoryWriter;
         this.stockHistoryReader = stockHistoryReader;
+        this.distributedLock = distributedLock;
     }
 
     /**
      * 상품 목록 조회
      */
     public List<Product> getProductsByProductIds(List<Long> productIds) {
-        return this.productReader.getProductsByIds(productIds);
+        List<String> lockNames = productIds.stream().map(distributedLock::genLockName).toList();
+        // 상품 개수 조회 시 lock 지정
+        try {
+            boolean locks = distributedLock.getLocks(lockNames);
+            if(!locks) {
+                throw new RuntimeException("Could not get locks");
+            }
+            return this.productReader.getProductsByIds(productIds);
+        } finally {
+            distributedLock.releaseLocks(lockNames);
+        }
     }
 
     /**
