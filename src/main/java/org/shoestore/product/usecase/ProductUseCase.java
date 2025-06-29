@@ -3,6 +3,8 @@ package org.shoestore.product.usecase;
 import java.util.HashMap;
 import java.util.List;
 import org.shoestore.order.model.Order;
+import org.shoestore.product.lock.DistributedLock;
+import org.shoestore.product.lock.RedisDistributedLock;
 import org.shoestore.product.model.Product;
 import org.shoestore.product.model.Stock;
 import org.shoestore.product.repository.ProductReader;

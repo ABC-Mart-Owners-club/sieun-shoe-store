@@ -4,6 +4,7 @@ import java.util.List;
 import org.shoestore.payment.model.Payments;
 import org.shoestore.payment.model.type.CardType;
 import org.shoestore.payment.usecase.PaymentUseCase;
+import org.shoestore.product.lock.DistributedLock;
 import org.shoestore.promotion.model.Promotion;
 import org.shoestore.promotion.usecase.PromotionUseCase;
 import org.shoestore.service.dto.PromotionRequestDto;
@@ -21,20 +22,24 @@ public class SalesService {
     private final ProductUseCase productUseCase;
     private final PaymentUseCase paymentUseCase;
     private final PromotionUseCase promotionUseCase;
+    private final DistributedLock distributedLock;
 
     public SalesService(OrderUseCase orderUseCase,
             ProductUseCase productUseCase,
             PaymentUseCase paymentUseCase,
-            PromotionUseCase promotionUseCase
+            PromotionUseCase promotionUseCase,
+            DistributedLock distributedLock
     ) {
         this.orderUseCase = orderUseCase;
         this.productUseCase = productUseCase;
         this.paymentUseCase = paymentUseCase;
         this.promotionUseCase = promotionUseCase;
+        this.distributedLock = distributedLock;
     }
 
     /**
      * 구매
+     * <p>0. 주문 대상 상품 lock 획득 (동시성 문제 해소)</p>
      * <p>1. Product 조회</p>
      * <p>2. 조회된 상품 기준 주문 저장</p>
      * <p>3. 프로모션 조회</p>
@@ -47,7 +52,11 @@ public class SalesService {
         User user = new User(dto.getUserId(), dto.getName(), dto.getPhoneNumber());
         Order order = null;
 
+        List<String> lockNames = dto.getProductIds().stream().map(distributedLock::genLockName).toList();
         try {
+            // 0 대상 상품 Lock
+            distributedLock.getLocks(lockNames);
+
             // 1 Product 조회
             List<Product> products = productUseCase.getProductsByProductIds(dto.getProductIds());
             // 2 조회된 상품 기준 주문 저장
@@ -61,13 +70,12 @@ public class SalesService {
             Payments payments = new Payments(order, dto.getCashAmount(),
                     dto.getCardAmount(), dto.getCardType(), promotion);
 
-            // todo : 근데 이게 살짝 어폐가 있는게, 유저는 할인먹기전 금액으로 결제 요청을 해야함. 이게 정상적으로 지켜지려면, 주문 생성, 결제 진행 2단계로 나뉘어야할듯함. (오프라인 기준으로는 그냥 진행)
             paymentUseCase.pay(order, payments);
 
             // 4. 상품 판매 처리
             productUseCase.sale(order, products);
 
-            // 5. 프로모션 사용 처리 todo : 갑자기 든 생각인데, 사용하는한 promotion을 조회해올때(3번) 이미 사용 처리를 같이 해버리면 어떨까? 문제될 수 있는 부분이 있나?
+            // 5. 프로모션 사용 처리
             promotionUseCase.use(order, promotion);
         } catch (Exception e) {
             // orderId를 트랜잭션키로 활용하여 update 된 내역 발생 시 롤백 처리
@@ -77,6 +85,8 @@ public class SalesService {
                 productUseCase.saleFailure(order);
             }
             throw new RuntimeException("결제 실패 : " + e.getMessage(), e);
+        } finally {
+            distributedLock.releaseLocks(lockNames);
         }
     }
 
